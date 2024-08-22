@@ -2,13 +2,10 @@ version: "3.6"
 
 services:
   thisrepo-testing:
-    image: "indigodatacloud/ci-images:python3.8"
+    image: "ai4oshub/ci-images:python3.10"
     container_name: "${BUILD_TAG}"
     hostname: "${BUILD_TAG}"
     working_dir: /srv
-    command: >
-      sh -c "git config --global --add safe.directory /srv &&
-             /usr/sbin/sshd -D"
     volumes:
       - type: bind
         source: ./

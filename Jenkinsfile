@@ -19,6 +19,6 @@ pipeline {
         always {
             // Clean after build
             cleanWs()
-        }    
+        }
     }
 }
