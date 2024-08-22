@@ -5,9 +5,9 @@ sqa_criteria:
       obsea-fish-detection:
         container: thisrepo-testing
         commands:
-          - sh -c 'pip3 install ai4-metadata-validator'
-          - sh -c 'echo "[Validating metadata]"'
-          - sh -c 'ai4-metadata-validator metadata.json'
+          - echo "[Check that Dockerfile and JenkinsConstants.groovy exist"]
+          - test -e Dockerfile
+          - test -e JenkinsConstants.groovy
 
 environment:
   LANG: C.UTF-8

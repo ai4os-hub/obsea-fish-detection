@@ -1,0 +1,30 @@
+metadata_version: 2.0.0
+title: OBSEA Fish Detection
+summary: AI-based fish detection and classification algorithm based on YOLOv8. The model has been finetuned to detect and classify fish at the OBSEA underwater observatory
+description: |-
+  obsea-fish-detection is an application using the DEEPaaS API.
+  AI-based fish detection and classification algorithm based on YOLOv8. The model has been finetuned to detect and classify fish at the OBSEA underwater observatory.
+dates:
+  created: '2023-11-29'
+  updated: '2024-08-22'
+links:
+  source_code: https://github.com/ai4os-hub/obsea-fish-detection
+  docker_image: ai4oshub/obsea-fish-detection
+  ai4_template: ai4-template-child/2.0.1
+tags:
+  - deep learning
+  - object detection
+  - yolov8
+  - vo.imagine-ai.eu
+tasks:
+  - Computer Vision
+  - Classification
+categories:
+  - AI4 pre trained
+  - AI4 trainable
+  - AI4 inference
+libraries:
+  - PyTorch
+data-type:
+  - Image
+  - Video
