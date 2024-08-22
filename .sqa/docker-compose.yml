@@ -6,6 +6,7 @@ services:
     container_name: "${BUILD_TAG}"
     hostname: "${BUILD_TAG}"
     working_dir: /srv
+    command: tail -f /dev/null
     volumes:
       - type: bind
         source: ./
