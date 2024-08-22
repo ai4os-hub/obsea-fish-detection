@@ -2,9 +2,8 @@
     "title": "OBSEA Fish Detection",
     "summary": "AI-based fish detection and classification algorithm based on YOLOv8. The model has been finetuned to detect and classify fish at the OBSEA underwater observatory.",
     "description": [
-        "obsea_fish_detection is an application using the DEEPaaS API.\n",
-        "Write additional information for your users (how to predict, how to retrain,",
-        "dataset description, training description, etc)."
+        "obsea-fish-detection is an application using the DEEPaaS API.\n",
+        "AI-based fish detection and classification algorithm based on YOLOv8. The model has been finetuned to detect and classify fish at the OBSEA underwater observatory."
     ],
     "keywords": [
         "docker",
@@ -15,13 +14,14 @@
     "license": "MIT",
     "date_creation": "2023-11-29",
     "sources": {
-		"dockerfile_repo": "https://github.com/EnocMartinez/obsea-fish-detection",
-		"docker_registry_repo": "deephdc/uc-enocmartinez-deep-oc-obsea-fish-detection",
-		"code": "https://github.com/EnocMartinez/obsea-fish-detection"
+        "dockerfile_repo": "https://github.com/ai4os-hub/obsea-fish-detection",
+        "docker_registry_repo": "ai4oshub/obsea-fish-detection",
+        "code": "https://github.com/ai4os-hub/obsea-fish-detection",
+        "ai4_template": "ai4-template-child/2.0.1"
 	},
     "continuous_integration": {
-        "build_status_badge": "https://jenkins.indigo-datacloud.eu/buildStatus/icon?job=Pipeline-as-code/DEEP-OC-org/UC-EnocMartinez-DEEP-OC-obsea-fish-detection/master",
-        "build_status_url": "https://jenkins.indigo-datacloud.eu/job/Pipeline-as-code/job/DEEP-OC-org/job/UC-EnocMartinez-DEEP-OC-obsea-fish-detection/job/master"
+        "build_status_badge": "https://jenkins.services.ai4os.eu/buildStatus/icon?job=AI4OS-hub/obsea-fish-detection/main",
+        "build_status_url": "https://jenkins.services.ai4os.eu/job/AI4OS-hub/job/obsea-fish-detection/job/main/"
     },
     "tosca": [
         {

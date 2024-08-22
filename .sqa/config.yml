@@ -1,0 +1,15 @@
+# .sqa/config.yml - jenkins-pipeline-library configuration file
+sqa_criteria:
+  qc_style:
+    repos:
+      obsea-fish-detection:
+        container: thisrepo-testing
+        commands:
+          - sh -c 'pip3 install ai4-metadata-validator'
+          - sh -c 'echo "[Validating metadata]"'
+          - sh -c 'ai4-metadata-validator metadata.json'
+
+environment:
+  LANG: C.UTF-8
+
+timeout: 600

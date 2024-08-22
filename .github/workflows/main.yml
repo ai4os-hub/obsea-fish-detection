@@ -36,7 +36,7 @@ jobs:
           # YOU SHOULD UPDATE THIS LINE
           #########################################################
 
-          UPSTREAM_REPO=https://github.com/EnocMartinez/obsea-fish-detection.git
+          UPSTREAM_REPO=https://github.com/ai4os-hub/obsea-fish-detection.git
 
           #########################################################
 

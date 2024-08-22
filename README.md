@@ -1,24 +1,22 @@
-<div align="center">
-<img src="https://marketplace.deep-hybrid-datacloud.eu/images/logo-deep.png" alt="logo" width="300"/>
-</div>
-
 # OBSEA Fish Detection
-[![Build Status](https://jenkins.indigo-datacloud.eu/buildStatus/icon?job=Pipeline-as-code/DEEP-OC-org/UC-EnocMartinez-DEEP-OC-obsea-fish-detection/master)](https://jenkins.indigo-datacloud.eu/job/Pipeline-as-code/job/DEEP-OC-org/job/UC-EnocMartinez-DEEP-OC-obsea-fish-detection/job/master)
+[![Build Status](https://jenkins.services.ai4os.eu/buildStatus/icon?job=AI4OS-hub/obsea-fish-detection/main)](https://jenkins.services.ai4os.eu/job/AI4OS-hub/job/obsea-fish-detection/job/main/)
 
-This is a container that will run the [obsea-fish-detection](https://github.com/EnocMartinez/obsea-fish-detection) application leveraging the DEEP as a Service API component ([DEEPaaS API V2](https://github.com/indigo-dc/DEEPaaS)).
+AI-based fish detection and classification algorithm based on YOLOv8. The model has been finetuned to detect and classify fish at the OBSEA underwater observatory.
+
+This is a container that will run the obsea-fish-detection application leveraging the DEEP as a Service API component ([DEEPaaS API](https://github.com/ai4os/DEEPaaS)). The application is based on **ai4oshub/ai4os-yolov8-torch** module.
 
     
 ## Running the container
 
 ### Directly from Docker Hub
 
-To run the Docker container directly from Docker Hub and start using the API simply run the following command:
+To run the Docker container directly from Docker Hub and start using the API, simply run the following command:
 
 ```bash
-$ docker run -ti -p 5000:5000 -p 6006:6006 -p 8888:8888 deephdc/uc-enocmartinez-deep-oc-obsea-fish-detection
+$ docker run -ti -p 5000:5000 -p 6006:6006 -p 8888:8888 ai4oshub/obsea-fish-detection
 ```
 
-This command will pull the Docker container from the Docker Hub [deephdc](https://hub.docker.com/u/deephdc/) repository and start the default command (`deepaas-run --listen-ip=0.0.0.0`).
+This command will pull the Docker container from the Docker Hub [ai4oshub](https://hub.docker.com/u/ai4oshub/) repository and start the default command (`deepaas-run --listen-ip=0.0.0.0`).
 
 **N.B.** For either CPU-based or GPU-based images you can also use [udocker](https://github.com/indigo-dc/udocker).
 
@@ -26,10 +24,10 @@ This command will pull the Docker container from the Docker Hub [deephdc](https:
 
 If you want to build the container directly in your machine (because you want to modify the `Dockerfile` for instance) follow the following instructions:
 ```bash
-git clone https://github.com/EnocMartinez/obsea-fish-detection
+git clone https://github.com/ai4os-hub/obsea-fish-detection
 cd obsea-fish-detection
-docker build -t deephdc/uc-enocmartinez-deep-oc-obsea-fish-detection .
-docker run -ti -p 5000:5000 -p 6006:6006 -p 8888:8888 deephdc/uc-enocmartinez-deep-oc-obsea-fish-detection
+docker build -t ai4oshub/obsea-fish-detection .
+docker run -ti -p 5000:5000 -p 6006:6006 -p 8888:8888 ai4oshub/obsea-fish-detection
 ```
 
 These three steps will download the repository from GitHub and will build the Docker container locally on your machine. You can inspect and modify the `Dockerfile` in order to check what is going on. For instance, you can pass the `--debug=True` flag to the `deepaas-run` command, in order to enable the debug mode.
@@ -49,13 +47,15 @@ Once the container is up and running, browse to http://0.0.0.0:5000/ui to get th
 │
 ├─ LICENSE                <- License file
 │
-├─ README.md              <- README for developers and users.
+├─ README.md              <- README for developers and users
 │
-└── metadata.json         <- Defines information propagated to the DEEP Marketplace
+├── .sqa/                 <- CI/CD configuration files
+│
+└─ metadata.json          <- Defines information propagated to the AI4OS Hub
 ```
 
 You can validate the `metadata.json` before making a git push using:
 ```shell
-pip install git+https://github.com/deephdc/schema4apps
-deep-app-schema-validator metadata.json
+pip install ai4-metadata-validator
+ai4-metadata-validator metadata.json
 ```
