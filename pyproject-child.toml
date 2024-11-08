@@ -7,7 +7,7 @@ name = "obsea_fish_detection"
 description = "AI-based fish detection and classification algorithm based on YOLOv8"
 readme = "README.md"
 requires-python = ">=3.8"
-license = { text = "MIT" }
+license = { text = "AGPL-3.0-only"}
 classifiers = [
     "Intended Audience :: Information Technology",
     "Intended Audience :: AI/ML/DL Researchers",

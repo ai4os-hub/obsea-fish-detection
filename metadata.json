@@ -11,7 +11,7 @@
         "yolov8",
         "vo.imagine-ai.eu"
     ],
-    "license": "MIT",
+    "license": "AGPL-3.0-only",
     "date_creation": "2023-11-29",
     "sources": {
         "dockerfile_repo": "https://github.com/ai4os-hub/obsea-fish-detection",
