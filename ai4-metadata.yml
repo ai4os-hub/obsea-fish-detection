@@ -31,7 +31,7 @@ links:
   source_code: https://github.com/ai4os-hub/obsea-fish-detection
   docker_image: ai4oshub/obsea-fish-detection
   ai4_template: ai4-template-child/2.0.1
-  dataset: https://zenodo.org/records/13903520
+  dataset: https://doi.org/10.5281/zenodo.13903520
 tags:
   - deep learning
   - object detection
