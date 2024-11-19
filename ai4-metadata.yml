@@ -2,8 +2,6 @@ metadata_version: 2.0.0
 title: OBSEA Fish Detection
 summary: AI-based fish detection and classification algorithm based on YOLOv8.
 description: |-
-ChatGPT
-
 The OBSEA is an underwater observatory that has been acquiring multiparametric data
 since 2009. Over the years, various cameras have been deployed, resulting in a vast 
 archive of pictures dating back to 2011. Historically, this data has been manually 
@@ -19,6 +17,10 @@ were utilized. The hyperparameters controlling the data augmentation were optimi
 according to the guidelines provided in the official documentation.
 This module is mainly based on this already [existing module](https://github.com/ai4os-hub/ai4os-yolov8-torch)
 
+Here is an example of the model's output:
+
+<img class='fit', src='https://raw.githubusercontent.com/ai4os-hub/obsea-fish-detection/main/obsea.png'/>
+  
 You can find more information on Yolov8 here:
 * https://github.com/ultralytics/ultralytics
 * https://docs.ultralytics.com
