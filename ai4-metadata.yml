@@ -19,7 +19,7 @@ This module is mainly based on this already [existing module](https://github.com
 
 Here is an example of the model's output:
 
-<img class='fit', src='https://raw.githubusercontent.com/ai4os-hub/obsea-fish-detection/main/obsea.png'/>
+<img class='fit', src='https://raw.githubusercontent.com/ai4os-hub/obsea-fish-detection/main/image/obsea.png'/>
   
 You can find more information on Yolov8 here:
 * https://github.com/ultralytics/ultralytics
