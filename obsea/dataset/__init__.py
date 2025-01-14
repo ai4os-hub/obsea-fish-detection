@@ -2,6 +2,7 @@
 
 import logging
 import os
+import zipfile
 
 import requests
 from tqdm import tqdm
@@ -11,12 +12,12 @@ from obsea import config
 logger = logging.getLogger(__name__)
 
 
-def download_dataset(url=None, zip_file=None):
+def download(url=None, zip_file=None):
     """Download the dataset if it doesn't already exist."""
 
     # Set the default values for the URL and zip file
     url = url or config.DATA_URL
-    zip_file = zip_file or config.DATA_ZIP_FILE
+    zip_file = zip_file or config.DATA_ZIPFILE
 
     # Check if the zip file already exists
     if os.path.exists(zip_file):
@@ -42,9 +43,22 @@ def download_dataset(url=None, zip_file=None):
             unit="iB",
             unit_scale=True,
             unit_divisor=1024,
-        ) as bar,
+        ) as progress_bar,
     ):
         for data in response.iter_content(block_size):
             file.write(data)
-            bar.update(len(data))
+            progress_bar.update(len(data))
     logger.info("Download completed successfully.")
+
+
+def extract(zip_file=None, datasets_dir=None):
+    """Extract the dataset if it hasn't already been extracted."""
+
+    # Set the default values for the function arguments
+    zip_file = zip_file or config.DATA_ZIPFILE
+    extract_dir = datasets_dir or config.DATASETS_DIR
+
+    # Extract the dataset
+    with zipfile.ZipFile(zip_file, "r") as zip_ref:
+        zip_ref.extractall(extract_dir)
+    logger.info("Decompression completed successfully.")
