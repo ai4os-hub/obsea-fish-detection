@@ -1,10 +1,12 @@
 """Dataset subpackage for the OBSEA project."""
 
+import json
 import logging
 import os
 import zipfile
 
 import requests
+import yaml
 from tqdm import tqdm
 
 from obsea import config
@@ -62,3 +64,31 @@ def extract(zip_file=None, datasets_dir=None):
     with zipfile.ZipFile(zip_file, "r") as zip_ref:
         zip_ref.extractall(extract_dir)
     logger.info("Decompression completed successfully.")
+
+
+def gen_yaml(version, datasets_dir=None):
+    """Generate the data.yaml file based on the obsea_dataset.json file."""
+
+    # Set the default values for the function arguments
+    datasets_dir = datasets_dir or config.DATASETS_DIR
+    class_file = f"{datasets_dir}/obsea_dataset_{version}/obsea_dataset.json"
+    data_dir = f"{datasets_dir}/obsea_dataset_{version}/images"
+    yaml_file = f"{datasets_dir}/obsea_dataset_{version}/obsea.yml"
+
+    # Load the JSON file and extract the class names
+    with open(class_file, "r", encoding="utf-8") as file:
+        data = json.load(file)
+    class_names = list(data.keys())
+
+    # Generate the YOLO data file for the dataset
+    yolo_yaml = {
+        "train": os.path.join(data_dir, "images"),
+        "val": os.path.join(data_dir, "images"),
+        "nc": len(class_names),
+        "names": class_names,
+    }
+
+    # Write the YOLO data file to disk
+    with open(yaml_file, "w", encoding="utf-8") as file:
+        yaml.dump(yolo_yaml, file, default_flow_style=False)
+    logger.info("obsea.yml file generated successfully.")
