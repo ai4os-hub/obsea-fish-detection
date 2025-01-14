@@ -28,7 +28,7 @@ def train(version, model_name=None, datasets_dir=None, settings=None):
 
     # Set the default values for the function arguments
     datasets_dir = datasets_dir or config.DATASETS_DIR
-    model = Model(model_name) or YOLO("yolov8n.yaml")
+    model = Model(model_name) if model_name else YOLO("yolov8n.yaml")
     data = f"{datasets_dir}/obsea_dataset_{version}/obsea.yml"
     settings = settings or TrainSettings()
 

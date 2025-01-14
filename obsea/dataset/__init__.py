@@ -14,12 +14,21 @@ from obsea import config
 logger = logging.getLogger(__name__)
 
 
-def download(url=None, zip_file=None):
+def data_url(version, base_url=None):
+    """Return the URL for the specified dataset version."""
+
+    # Set the default values for the function arguments
+    base_url = base_url or config.DATA_BASE_URL
+
+    # Return the URL for the dataset version
+    return f"{base_url}/obsea_dataset_{version}.zip?download=1"
+
+
+def download(zip_file, version=None):
     """Download the dataset if it doesn't already exist."""
 
     # Set the default values for the URL and zip file
-    url = url or config.DATA_URL
-    zip_file = zip_file or config.DATA_ZIPFILE
+    url = data_url(version or config.DATA_VERSION)
 
     # Check if the zip file already exists
     if os.path.exists(zip_file):
@@ -53,11 +62,10 @@ def download(url=None, zip_file=None):
     logger.info("Download completed successfully.")
 
 
-def extract(zip_file=None, datasets_dir=None):
+def extract(zip_file, datasets_dir=None):
     """Extract the dataset if it hasn't already been extracted."""
 
     # Set the default values for the function arguments
-    zip_file = zip_file or config.DATA_ZIPFILE
     extract_dir = datasets_dir or config.DATASETS_DIR
 
     # Extract the dataset
