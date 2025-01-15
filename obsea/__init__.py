@@ -2,6 +2,7 @@
 
 import dataclasses as dc
 import logging
+from importlib import resources
 
 from ultralytics import YOLO
 from ultralytics.engine.model import Model
@@ -17,7 +18,6 @@ class TrainSettings:
 
     epochs: int = 100
     batch: int = 8
-    half: bool = True
 
 
 def train(version, model_name=None, datasets_dir=None, settings=None):
@@ -29,11 +29,11 @@ def train(version, model_name=None, datasets_dir=None, settings=None):
     # Set the default values for the function arguments
     datasets_dir = datasets_dir or config.DATASETS_DIR
     model = Model(model_name) if model_name else YOLO("yolov8n.yaml")
-    data = f"{datasets_dir}/obsea_dataset_{version}/obsea.yml"
     settings = settings or TrainSettings()
+    obsea_yaml = resources.files("obsea.data_files") / f"{version}.yml"
 
     # Train the model
-    model.train(data, **settings.__dict__)
+    model.train(data=obsea_yaml, **settings.__dict__)
     logging.info("Model training completed successfully.")
 
     # Save the trained model
