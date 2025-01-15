@@ -9,6 +9,7 @@
         "${workspaceFolder}/pyproject.toml"
     ],
     "cSpell.words": [
+        "bndbox",
         "finetuned",
         "obsea",
         "OBSEA",
