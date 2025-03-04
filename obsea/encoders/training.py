@@ -52,7 +52,7 @@ def _train_step(model, inputs, criterion, optimizer, sparsity_weight):
 def _log_epoch(epoch, epochs, running_loss, dataloader):
     console.print(
         (
-            f"[bold green]Epoch [{epoch + 1}/{epochs}], "
-            f"Loss: {running_loss / len(dataloader):.4f}[/bold green]"
+            f"Epoch [{epoch + 1}/{epochs}], "
+            f"Loss: {running_loss / len(dataloader):.4f}"
         )
     )
