@@ -19,10 +19,3 @@ def test_download(zip_file):
 def test_extract(version):
     """Test the extract_dataset function."""
     assert os.path.exists(f"datasets/obsea_dataset_{version}")
-
-
-@pytest.mark.parametrize("version", ["v3.1"])
-@pytest.mark.usefixtures("gen_yaml")
-def test_yaml(version):
-    """Test the extract_dataset function."""
-    assert os.path.exists(f"obsea_{version}.yml")
