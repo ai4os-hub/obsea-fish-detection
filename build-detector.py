@@ -84,7 +84,7 @@ def generate_data_yaml(json_file, yaml_file, data_dir):
 def train_model(yaml_file):
     """Train the YOLOv8 model and save the trained model."""
     model = YOLO("yolov8n.yaml")  # Load a YOLOv8 model configuration
-    model.train(data=yaml_file, epochs=100)  # Train the model
+    model.train(data=yaml_file, epochs=100, batch=8, half=True)
     model.save("yolov8_obsea.pt")  # Save the trained model
     print("Model training completed and saved as yolov8_obsea.pt.")
 
