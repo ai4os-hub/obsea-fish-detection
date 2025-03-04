@@ -5,7 +5,7 @@
 import pytest
 from torch.utils.data import DataLoader
 
-from obsea import config, datasets, encoders
+from obsea import datasets, encoders
 from obsea.datasets import ImageDataset, transform
 
 
@@ -41,7 +41,5 @@ def sparse_training(autoencoder, dataset):
         model=autoencoder,
         dataloader=DataLoader(dataset, 32),
         epochs=1,
-        learning_rate=0.001,
         sparsity_weight=0.01,
-        device=config.device,
     )

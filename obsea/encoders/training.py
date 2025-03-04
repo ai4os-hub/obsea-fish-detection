@@ -1,23 +1,21 @@
 import torch
 from torch import nn, optim
 from torch.utils.data import DataLoader
-from rich.console import Console
 
+from obsea import config
 from obsea.encoders.models import Autoencoder
-
-console = Console()
+from obsea.utils import console
 
 
 def train_sparse_autoencoder(
     model: Autoencoder,
     dataloader: DataLoader,
-    epochs: int,
-    learning_rate: float,
-    sparsity_weight: float,
-    device: torch.device,
+    epochs: int = 100,
+    learning_rate: float = 1e-3,
+    sparsity_weight: float = 1e-5,
 ):
     """Train an autoencoder model as a sparse autoencoder."""
-    model.to(device)
+    model.to(config.device)  # Move the model to the device
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
@@ -25,7 +23,7 @@ def train_sparse_autoencoder(
         model.train()
         running_loss = 0.0
         for data in dataloader:
-            inputs = data.to(device)
+            inputs = data.to(config.device)
             loss = _train_step(
                 model, inputs, criterion, optimizer, sparsity_weight
             )

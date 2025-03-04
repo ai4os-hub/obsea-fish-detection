@@ -96,7 +96,6 @@ def main(args: Arguments):
         epochs=args.epochs,
         learning_rate=args.learning_rate,
         sparsity_weight=args.sparsity_weight,
-        device=config.device,
     )
 
     logger.info("Saving the trained model as %s", args.output)
