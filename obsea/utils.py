@@ -6,6 +6,7 @@ from pydantic_settings import (
     CliSettingsSource,
     PydanticBaseSettingsSource,
 )
+from rich.console import Console
 from rich_argparse import RichHelpFormatter
 
 from obsea import config
@@ -35,6 +36,9 @@ class BaseArguments(BaseSettings):
             dotenv_settings,
             file_secret_settings,
         )
+
+
+console = Console()
 
 
 def load_config(version: str) -> dict:
