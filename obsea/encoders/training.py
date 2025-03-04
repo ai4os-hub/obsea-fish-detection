@@ -1,8 +1,11 @@
 import torch
 from torch import nn, optim
 from torch.utils.data import DataLoader
+from rich.console import Console
 
 from obsea.encoders.models import Autoencoder
+
+console = Console()
 
 
 def train_sparse_autoencoder(
@@ -23,23 +26,35 @@ def train_sparse_autoencoder(
         running_loss = 0.0
         for data in dataloader:
             inputs = data.to(device)
-            optimizer.zero_grad()
-
-            outputs = model(inputs)
-            mse_loss = criterion(outputs, inputs)
-
-            # Sparsity loss
-            encoded = model.encoder(inputs)
-            sparsity_loss = torch.mean(torch.abs(encoded))
-
-            loss = mse_loss + sparsity_weight * sparsity_loss
-            loss.backward()
-            optimizer.step()
-
+            loss = _train_step(
+                model, inputs, criterion, optimizer, sparsity_weight
+            )
             running_loss += loss.item()
 
-        print(
-            f"Epoch [{epoch+1}/{epochs}], Loss: {running_loss/len(dataloader)}"
-        )
+        _log_epoch(epoch, epochs, running_loss, dataloader)
 
-    print("Training complete.")
+    console.print("[bold blue]Training complete.[/bold blue]")
+
+
+def _train_step(model, inputs, criterion, optimizer, sparsity_weight):
+    optimizer.zero_grad()
+    outputs = model(inputs)
+    mse_loss = criterion(outputs, inputs)
+
+    # Sparsity loss
+    encoded = model.encoder(inputs)
+    sparsity_loss = torch.mean(torch.abs(encoded))
+
+    loss = mse_loss + sparsity_weight * sparsity_loss
+    loss.backward()
+    optimizer.step()
+    return loss
+
+
+def _log_epoch(epoch, epochs, running_loss, dataloader):
+    console.print(
+        (
+            f"[bold green]Epoch [{epoch + 1}/{epochs}], "
+            f"Loss: {running_loss / len(dataloader):.4f}[/bold green]"
+        )
+    )
