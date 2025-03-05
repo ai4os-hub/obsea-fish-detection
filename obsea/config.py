@@ -3,7 +3,6 @@
 import os
 from importlib import resources
 from pathlib import Path
-from typing import Tuple
 from urllib.parse import urlparse
 
 import torch
@@ -19,12 +18,6 @@ device: str = DEVICE if torch.cuda.is_available() else "cpu"
 # Configuration settings for the application
 CONFIG_PATH = os.getenv("CONFIG_PATH", f"{install_path}/config-files")
 config_path: Path = Path(CONFIG_PATH)
-
-# Image transformation settings
-IMAGE_RESIZE_X = os.getenv("IMAGE_RESIZE", "192")
-IMAGE_RESIZE_Y = os.getenv("IMAGE_RESIZE", "108")
-image_resize: Tuple[int, int] = (int(IMAGE_RESIZE_Y), int(IMAGE_RESIZE_X))
-
 
 # Paths configuration settings
 DATABASE_URL = "https://zenodo.org/records/13903520/files"

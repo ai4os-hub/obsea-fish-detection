@@ -1,6 +1,9 @@
-from torch.utils.data import DataLoader, Dataset
-from torchvision import transforms
+"""Module to create dataloaders for the datasets."""
+
 from PIL import Image
+from torch.utils.data import Dataset
+from torchvision import transforms
+
 from obsea import config
 
 
@@ -19,9 +22,12 @@ class ImageDataset(Dataset):
         return image.to(config.device)
 
 
-transform = transforms.Compose(
-    [
-        transforms.Resize(config.image_resize),
-        transforms.ToTensor(),
-    ]
-)
+def get_transform(settings):
+    """Get the transform for the dataset."""
+    return transforms.Compose(
+        [
+            transforms.Resize(settings["resize"]),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=settings["mean"], std=settings["std"]),
+        ]
+    )

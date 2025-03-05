@@ -36,14 +36,10 @@ def train_sparse_autoencoder(
 
 def _train_step(model, inputs, criterion, optimizer, sparsity_weight):
     optimizer.zero_grad()
-    outputs = model(inputs)
-    mse_loss = criterion(outputs, inputs)
-
-    # Sparsity loss
-    encoded = model.encoder(inputs)
-    sparsity_loss = torch.mean(torch.abs(encoded))
-
-    loss = mse_loss + sparsity_weight * sparsity_loss
+    encoded, decoded = model(inputs)
+    loss_mse = criterion(decoded, inputs)
+    loss_sparsity = torch.norm(encoded, p=1)
+    loss = loss_mse + sparsity_weight * loss_sparsity
     loss.backward()
     optimizer.step()
     return loss

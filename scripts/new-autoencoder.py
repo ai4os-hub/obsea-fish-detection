@@ -3,6 +3,7 @@
 
 import logging
 from typing import Literal
+import datetime as dt
 
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
@@ -10,7 +11,7 @@ from rich.logging import RichHandler
 from torch.utils.data import DataLoader
 
 from obsea import config, datasets, encoders, utils
-from obsea.datasets import ImageDataset, transform
+from obsea.datasets import ImageDataset
 from obsea.encoders import Autoencoder
 
 LogLevel = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
@@ -32,7 +33,7 @@ class Arguments(utils.BaseArguments):
         description="Set the logging level.",
     )
     output: str = Field(
-        default="autoencoder.pt",
+        default=f"autoencoder-{dt.datetime.now().strftime('%Y%m%d%H%M')}.pt",
         description="Output name for.",
     )
 
@@ -52,7 +53,7 @@ class Arguments(utils.BaseArguments):
 
     # Encoder settings
     latent_dim: int = Field(
-        default=64,
+        default=1024,
         description="Dimension of the latent space.",
     )
 
@@ -66,7 +67,7 @@ class Arguments(utils.BaseArguments):
         description="Learning rate for the optimizer.",
     )
     sparsity_weight: float = Field(
-        default=1e-5,
+        default=1e-6,
         description="Weight for the sparsity loss.",
     )
 
@@ -84,10 +85,12 @@ def main(args: Arguments):
     image_paths = [images_parent / name for name in image_names]
 
     logger.info("Creating dataset with images")
+    transform = datasets.get_transform(settings["transform"])
     dataset = ImageDataset(image_paths, transform=transform)
 
     logger.info("Creating the autoencoder model")
-    model = Autoencoder(in_channels, args.latent_dim)
+    in_shape = (in_channels, *settings["transform"]["resize"])
+    model = Autoencoder(in_shape, args.latent_dim)
 
     logger.info("Training the autoencoder")
     encoders.train_sparse_autoencoder(

@@ -2,6 +2,13 @@
 shape = [1080, 1920]
 n_channels = 3
 
+
+[transform]
+resize = [216, 384]
+mean = [0.00, 0.00, 0.00]
+std = [1.00, 1.00, 1.00]
+
+
 [camera_state]
 clean = [
     "20230728-083036-IPC608_8B64_165.jpg",

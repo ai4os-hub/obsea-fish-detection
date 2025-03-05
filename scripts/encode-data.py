@@ -76,8 +76,7 @@ def main(args: Arguments):
     encoded = torch.concat(encoded, dim=0)
 
     # Generate the filename for the encoded data
-    now = dt.datetime.now().strftime("%Y%m%d%H%M%S")
-    filename = f"{args.version}_{args.autoencoder}_{now}"
+    filename = f"{args.version}_{args.autoencoder}"
 
     logger.info("Saving the encoded data to %s", filename)
     encoders.save_encodings(encoded, filename)
