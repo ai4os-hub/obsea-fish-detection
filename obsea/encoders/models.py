@@ -7,8 +7,6 @@ from typing import Tuple
 
 from torch import Tensor, nn
 
-from obsea import config
-
 
 class Encoder(nn.Module):
     """Encoder part of the autoencoder using convolutional layers."""

@@ -1,7 +1,6 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=invalid-name
 
-import datetime as dt
 import logging
 from typing import Literal
 
@@ -12,7 +11,7 @@ from rich.logging import RichHandler
 from torch.utils.data import DataLoader
 
 from obsea import config, datasets, encoders, utils
-from obsea.datasets import ImageDataset, transform
+from obsea.datasets import ImageDataset, get_transform
 
 LogLevel = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 logger = logging.getLogger(__name__)
@@ -53,33 +52,27 @@ def main(args: Arguments):
 
     logger.info("Loading autoencoder model from %s", args.autoencoder)
     autoencoder = utils.load_model(f"{args.autoencoder}.pt")
-    autoencoder.to(config.device)
-    autoencoder.eval()
 
     logger.info("Loading settings file for version %s", args.version)
     settings = utils.load_config(args.version)
     images_parent = datasets.images_path(args.version)
+    transform = get_transform(settings["transform"])
 
-    logger.info("Loading images from %s", images_parent)
-    clean_names = settings["camera_state"]["clean"]
-    dirty_names = settings["camera_state"]["dirty"]
-    image_names = clean_names + dirty_names
-    image_paths = [images_parent / name for name in image_names]
+    logger.info("Loading clean images from %s", images_parent)
+    names = settings["camera_state"]["clean"]
+    paths = [images_parent / name for name in names]
 
-    logger.info("Creating dataset with images")
-    dataset = ImageDataset(image_paths, transform=transform)
-    dataloader = DataLoader(dataset, batch_size=32, shuffle=False)
+    filename = f"{args.version}_{args.autoencoder}_clean"
+    logger.info("Encoding clean images to %s", filename)
+    encoders.encode(autoencoder, paths, filename, transform)
 
-    logger.info("Encoding the dataset with the autoencoder")
-    with torch.no_grad():
-        encoded = [autoencoder.encoder(x) for x in dataloader]
-    encoded = torch.concat(encoded, dim=0)
+    logger.info("Loading dirty images from %s", images_parent)
+    names = settings["camera_state"]["dirty"]
+    paths = [images_parent / name for name in names]
 
-    # Generate the filename for the encoded data
-    filename = f"{args.version}_{args.autoencoder}"
-
-    logger.info("Saving the encoded data to %s", filename)
-    encoders.save_encodings(encoded, filename)
+    filename = f"{args.version}_{args.autoencoder}_dirty"
+    logger.info("Encoding dirty images to %s", filename)
+    encoders.encode(autoencoder, paths, filename, transform)
 
 
 if __name__ == "__main__":
