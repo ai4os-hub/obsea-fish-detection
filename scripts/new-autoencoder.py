@@ -1,14 +1,14 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=invalid-name
 
-import logging
-from typing import Literal
 import datetime as dt
+import logging
+from typing import Literal, Optional
 
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 from rich.logging import RichHandler
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, random_split
 
 from obsea import config, datasets, encoders, utils
 from obsea.datasets import ImageDataset
@@ -62,6 +62,10 @@ class Arguments(utils.BaseArguments):
         default=50,
         description="Number of training epochs.",
     )
+    validation_split: float = Field(
+        default=0.1,
+        description="Fraction of the dataset to use for validation.",
+    )
     learning_rate: float = Field(
         default=1e-3,
         description="Learning rate for the optimizer.",
@@ -69,6 +73,10 @@ class Arguments(utils.BaseArguments):
     sparsity_weight: float = Field(
         default=1e-6,
         description="Weight for the sparsity loss.",
+    )
+    early_stopping: Optional[int] = Field(
+        default=None,
+        description="Number of epochs to wait for early stopping.",
     )
 
 
@@ -80,13 +88,18 @@ def main(args: Arguments):
     logger.info("Loading settings file for version %s", args.version)
     settings = utils.load_config(args.version)
     images_parent = datasets.images_path(args.version)
+    transform = datasets.get_transform(settings["transform"])
+
+    logger.info("Creating image paths and from settings")
     in_channels = settings["image"]["n_channels"]
     image_names = settings["camera_state"]["clean"]
     image_paths = [images_parent / name for name in image_names]
 
-    logger.info("Creating dataset with images")
-    transform = datasets.get_transform(settings["transform"])
+    logger.info("Creating the dataset for training and validation")
     dataset = ImageDataset(image_paths, transform=transform)
+    val_size = int(len(dataset) * args.validation_split)
+    train_size = len(dataset) - val_size
+    train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
 
     logger.info("Creating the autoencoder model")
     in_shape = (in_channels, *settings["transform"]["resize"])
@@ -95,10 +108,20 @@ def main(args: Arguments):
     logger.info("Training the autoencoder")
     encoders.train_sparse_autoencoder(
         model=model,
-        dataloader=DataLoader(dataset, args.batch_size, args.shuffle),
+        train_dataloader=DataLoader(
+            train_dataset,
+            batch_size=args.batch_size,
+            shuffle=args.shuffle,
+        ),
+        val_dataloader=DataLoader(
+            val_dataset,
+            batch_size=args.batch_size,
+            shuffle=False,
+        ),
         epochs=args.epochs,
         learning_rate=args.learning_rate,
         sparsity_weight=args.sparsity_weight,
+        early_stopping=args.early_stopping,
     )
 
     logger.info("Saving the trained model as %s", args.output)
