@@ -45,4 +45,4 @@ obsea = "obsea.api"
 ignore_errors = true
 
 [tool.black]
-line-length = 80
+line-length = 120
