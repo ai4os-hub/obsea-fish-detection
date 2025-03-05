@@ -16,7 +16,7 @@ class ImageDataset(Dataset):
         image = Image.open(self.image_paths[idx]).convert("RGB")
         if self.transform:
             image = self.transform(image)
-        return image
+        return image.to(config.device)
 
 
 transform = transforms.Compose(

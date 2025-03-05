@@ -48,7 +48,13 @@ def load_config(version: str) -> dict:
         return toml.load(file)
 
 
-def save_model(model, output: str):
+def save_model(model: torch.nn.Module, output: str) -> None:
     """Save the model to a file."""
     file_path = config.models_path / output
     torch.save(model, file_path)
+
+
+def load_model(filename: str) -> torch.nn.Module:
+    """Load a model from a file."""
+    file_path = config.models_path / filename
+    return torch.load(file_path, weights_only=False)

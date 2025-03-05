@@ -41,3 +41,6 @@ datasets_path: Path = Path(DATASETS_DIR)
 
 MODELS_DIR = os.getenv("MODELS_DIR", "models")
 models_path: Path = Path(MODELS_DIR)
+
+ENCODED_DIR = os.getenv("ENCODED_DIR", "encoded")
+encoded_path: Path = Path(ENCODED_DIR)
