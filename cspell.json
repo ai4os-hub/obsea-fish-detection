@@ -4,7 +4,13 @@
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
-        "obsea"
+        "addopts",
+        "deepaas",
+        "mypy",
+        "obsea",
+        "pythonpath",
+        "setuptools",
+        "Unflatten"
     ],
     "ignoreWords": [],
     "import": []
