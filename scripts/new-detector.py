@@ -6,6 +6,7 @@ import logging
 from functools import partial
 from typing import Literal
 
+from frouros.callbacks.batch import PermutationTestDistanceBased
 from frouros.detectors.data_drift import MMD
 from frouros.utils.kernels import rbf_kernel
 from pydantic import Field
@@ -47,6 +48,10 @@ class Arguments(utils.BaseArguments):
         default=0.5,
         description="Sigma value for the RBF kernel.",
     )
+    permutations: int = Field(
+        default=100,
+        description="Number of permutations for the permutation test.",
+    )
 
 
 def main(args: Arguments):
@@ -58,8 +63,10 @@ def main(args: Arguments):
     encoded_data = encoders.load_encodings(args.encoded)
 
     logger.info("Creating drift detector based on %s", MMD)
-    kernel = partial(rbf_kernel, sigma=args.sigma)
-    detector = MMD(kernel)
+    detector = MMD(
+        kernel=partial(rbf_kernel, sigma=args.sigma),
+        callbacks=[PermutationTestDistanceBased(args.permutations)],
+    )
 
     logger.info("Fitting drift detector with encoded data")
     training_info = detector.fit(X=encoded_data.cpu().numpy())
