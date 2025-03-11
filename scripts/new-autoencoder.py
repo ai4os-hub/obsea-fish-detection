@@ -34,7 +34,7 @@ class Arguments(utils.BaseArguments):
         description="Set the logging level.",
     )
     output: str = Field(
-        default=f"autoencoder-{dt.datetime.now().strftime('%Y%m%d%H%M')}.pt",
+        default=f"autoencoder-{dt.datetime.now().strftime('%Y%m%d%H%M')}",
         description="Output name for the autoencoder model.",
     )
 
@@ -44,7 +44,7 @@ class Arguments(utils.BaseArguments):
         description="Dataset version to use for training.",
     )
     batch_size: int = Field(
-        default=32,
+        default=4,
         description="Batch size for the dataloader.",
     )
     shuffle: bool = Field(
@@ -54,13 +54,13 @@ class Arguments(utils.BaseArguments):
 
     # Encoder settings
     latent_dim: int = Field(
-        default=1024,
+        default=200,
         description="Dimension of the latent space.",
     )
 
     # Training settings
     epochs: int = Field(
-        default=50,
+        default=200,
         description="Number of training epochs.",
     )
     validation_split: float = Field(
