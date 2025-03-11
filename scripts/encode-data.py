@@ -4,14 +4,12 @@
 import logging
 from typing import Literal
 
-import torch
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 from rich.logging import RichHandler
-from torch.utils.data import DataLoader
 
 from obsea import config, datasets, encoders, utils
-from obsea.datasets import ImageDataset, get_transform
+from obsea.datasets import get_transform
 
 LogLevel = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 logger = logging.getLogger(__name__)
@@ -51,7 +49,7 @@ def main(args: Arguments):
     logger.info("Dataset script with log level: %s", args.log_level)
 
     logger.info("Loading autoencoder model from %s", args.autoencoder)
-    autoencoder = utils.load_model(f"{args.autoencoder}.pt")
+    autoencoder = utils.load_model(args.autoencoder)
 
     logger.info("Loading settings file for version %s", args.version)
     settings = utils.load_config(args.version)

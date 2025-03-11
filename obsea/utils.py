@@ -48,25 +48,25 @@ def load_config(version: str) -> dict:
 
 def save_model(model: torch.nn.Module, output: str) -> None:
     """Save the model to a file."""
-    file_path = config.models_path / output
+    file_path = config.models_path / f"{output}.pt"
     torch.save(model, file_path)
 
 
 def load_model(filename: str) -> torch.nn.Module:
     """Load a model from a file."""
-    file_path = config.models_path / filename
+    file_path = config.models_path / f"{filename}.pt"
     return torch.load(file_path, weights_only=False)
 
 
 def save_detector(detector: Any, output: str) -> None:
     """Save the detector to a file."""
-    file_path = config.models_path / output
+    file_path = config.models_path / f"{output}.pkl"
     with open(file_path, "wb") as file:
         pickle.dump(detector, file)
 
 
 def load_detector(filename: str) -> Any:
     """Load a detector from a file."""
-    file_path = config.models_path / filename
+    file_path = config.models_path / f"{filename}.pkl"
     with open(file_path, "rb") as file:
         return pickle.load(file)
