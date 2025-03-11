@@ -94,6 +94,7 @@ def main(args: Arguments):
     logger.info("Creating image paths and from settings")
     in_channels = settings["image"]["n_channels"]
     image_names = settings["camera_state"]["clean"]
+    image_names += settings["camera_state"]["dirty"]
     image_paths = [images_parent / name for name in image_names]
 
     logger.info("Creating the dataset for training and validation")
