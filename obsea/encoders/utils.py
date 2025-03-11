@@ -37,3 +37,9 @@ def save_encodings(encoded, filename: str):
     os.makedirs(config.encoded_path, exist_ok=True)
     output_path = config.encoded_path / f"{filename}.pt"
     torch.save(encoded, output_path)
+
+
+def load_encodings(filename: str):
+    """Load the encoded images and labels from the output directory."""
+    input_path = config.encoded_path / f"{filename}.pt"
+    return torch.load(input_path)

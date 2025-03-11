@@ -1,15 +1,13 @@
+import pickle
 import tomllib as toml
 
 import torch
-from pydantic_settings import (
-    BaseSettings,
-    CliSettingsSource,
-    PydanticBaseSettingsSource,
-)
+from pydantic_settings import BaseSettings, CliSettingsSource, PydanticBaseSettingsSource
 from rich.console import Console
 from rich_argparse import RichHelpFormatter
 
 from obsea import config
+from typing import Any
 
 
 class BaseArguments(BaseSettings):
@@ -58,3 +56,17 @@ def load_model(filename: str) -> torch.nn.Module:
     """Load a model from a file."""
     file_path = config.models_path / filename
     return torch.load(file_path, weights_only=False)
+
+
+def save_detector(detector: Any, output: str) -> None:
+    """Save the detector to a file."""
+    file_path = config.models_path / output
+    with open(file_path, "wb") as file:
+        pickle.dump(detector, file)
+
+
+def load_detector(filename: str) -> Any:
+    """Load a detector from a file."""
+    file_path = config.models_path / filename
+    with open(file_path, "rb") as file:
+        return pickle.load(file)

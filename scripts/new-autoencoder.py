@@ -20,7 +20,8 @@ logger = logging.getLogger(__name__)
 
 class Arguments(utils.BaseArguments):
     """
-    This script provides a command-line interface to
+    This script provides a command-line interface to train a sparse
+    autoencoder.
     """  # Description for the script help message
 
     model_config = SettingsConfigDict(
@@ -34,7 +35,7 @@ class Arguments(utils.BaseArguments):
     )
     output: str = Field(
         default=f"autoencoder-{dt.datetime.now().strftime('%Y%m%d%H%M')}.pt",
-        description="Output name for.",
+        description="Output name for the autoencoder model.",
     )
 
     # Dataset settings
