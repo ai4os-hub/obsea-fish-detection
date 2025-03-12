@@ -1,5 +1,6 @@
 torchvision ~= 0.21.0
 pydantic-settings ~= 2.8.0
+drift-monitor ~= 1.1.0
 rich ~= 13.9.4
 rich_argparse ~= 1.7.0
 frouros ~= 0.9.0
