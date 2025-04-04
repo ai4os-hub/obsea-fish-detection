@@ -5,10 +5,52 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Module",
+            "name": "API: DEEPaaS Run",
             "type": "debugpy",
             "request": "launch",
-            "module": "obsea.encode-data"
+            "module": "deepaas.cmd.run",
+            "args": [ "--config-file=deepaas.conf" ],
+            "envFile": "${workspaceFolder}/.env",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "justMyCode": true,
+        },
+        {
+            "name": "OBSEA: Encode data",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "scripts.encode-data",
+            "args": [ ],
+            "envFile": "${workspaceFolder}/.env",
+            "env": { "PYTHONPATH": "${workspaceFolder}" },
+        },
+        {
+            "name": "OBSEA: Get dataset",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "scripts.get-dataset",
+            "args": [ ],
+            "envFile": "${workspaceFolder}/.env",
+            "env": { "PYTHONPATH": "${workspaceFolder}" },
+        },
+        {
+            "name": "OBSEA: New autoencoder",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "scripts.new-autoencoder",
+            "args": [ ],
+            "envFile": "${workspaceFolder}/.env",
+            "env": { "PYTHONPATH": "${workspaceFolder}" },
+        }
+        {
+            "name": "OBSEA: New detector",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "scripts.new-detector",
+            "args": [ ],
+            "envFile": "${workspaceFolder}/.env",
+            "env": { "PYTHONPATH": "${workspaceFolder}" },
         }
     ]
 }
