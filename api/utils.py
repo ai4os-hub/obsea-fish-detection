@@ -47,9 +47,9 @@ def load_image(image_path):
 
 
 # Load the detector and autoencoder model
-detector = MMDStreaming(window_size=10, kernel=partial(rbf_kernel, sigma=0.5))
+detector = MMDStreaming(window_size=12, kernel=partial(rbf_kernel, sigma=0.3))
 autoencoder = obsea.utils.load_model("autoencoder")
 
 # Image loader transformer for the autoencoder
-transform_settings = obsea.utils.load_config(config.data_version)
-transform = obsea.datasets.get_transform(transform_settings)
+settings = obsea.utils.load_config(config.data_version)
+transform = obsea.datasets.get_transform(settings["transform"])
