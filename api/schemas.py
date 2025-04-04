@@ -34,13 +34,13 @@ class PredArgsSchema(marshmallow.Schema):
         metadata={
             "description": "Steps before prediction round is finished.",
         },
-        load_default=1.0,
+        load_default=0.100,
         validate=validate.Range(min=0.0),
     )
     drift_distance = fields.Float(
         metadata={
             "description": "Return format for method response.",
         },
-        load_default=2.0,
+        load_default=0.125,
         validate=validate.Range(min=0.0),
     )
