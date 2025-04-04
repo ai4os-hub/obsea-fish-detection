@@ -53,9 +53,9 @@ def warm():
     try:  # Warm up the detector with clean data
         logger.info("Warming up the detector with local data")
         clean = load_encodings(f"{config.data_version}_autoencoder_clean")
-        utils.detector.fit(clean)  # Warm up the detector with clean data
+        utils.detector.fit(clean.cpu().numpy())  # Warm up with clean data
         for sample in clean[: utils.detector.window_size]:
-            utils.detector.update(sample)
+            utils.detector.update(sample.cpu().numpy())
     except Exception as err:
         logger.error("Error when warming up: %s", err, exc_info=True)
         raise  # Reraise the exception after log
@@ -93,8 +93,8 @@ def predict(input_file, accept="application/json", **options):
     try:  # Load the image and encode it
         logger.debug("Loading image from input_file: %s", input_file.filename)
         image = utils.load_image(input_file.filename)
-        normalized = utils.transform(image)
-        encoded = utils.autoencoder.encoder(normalized)
+        normalized = utils.transform(image).to(config.device)
+        encoded = utils.autoencoder.encoder(normalized.unsqueeze(0))[0]
     except Exception as err:
         logger.error("Error loading image: %s", err, exc_info=True)
         raise  # Reraise the exception after log
@@ -102,7 +102,7 @@ def predict(input_file, accept="application/json", **options):
         logger.debug("Detecting drift with options: %s", options)
         v, tags = config.data_version, config.tags
         with dw.DriftMonitor("obsea-camera", v, tags) as monitor:
-            result, _ = utils.detector.update(encoded)
+            result, _ = utils.detector.update(encoded.detach().cpu().numpy())
             warning = result.distance > options["warning_distance"]
             detected = result.distance > options["drift_distance"]
             monitor(detected, {"distance": result.distance})
