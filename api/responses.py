@@ -8,5 +8,38 @@ need to modify them for your needs.
 
 import logging
 
+import numpy as np
+
 logger = logging.getLogger(__name__)
-content_types = {"application/json": None}
+
+
+class NumpyEncoder:
+    """Custom JSON Encoder for NumPy data types."""
+
+    @staticmethod
+    def decode(o):
+        """Convert NumPy data types to standard Python types."""
+        if isinstance(o, np.ndarray):
+            return o.tolist()
+        if isinstance(o, (np.integer, np.floating)):
+            return o.item()
+        if isinstance(o, np.bool):
+            return o.item()
+        if isinstance(o, dict):
+            return {k: NumpyEncoder.decode(v) for k, v in o.items()}
+        if isinstance(o, list):
+            return [NumpyEncoder.decode(i) for i in o]
+        if isinstance(o, tuple):
+            return tuple(NumpyEncoder.decode(i) for i in o)
+        return o
+
+
+def json_response(data):
+    """Convert the data to JSON format."""
+    logger.debug("Response result: %s", data)
+    return NumpyEncoder.decode(data)
+
+
+content_types = {
+    "application/json": json_response,
+}

@@ -13,7 +13,7 @@ import drift_monitor as dw
 
 from obsea.encoders.utils import load_encodings
 
-from . import config, schemas, utils
+from . import config, schemas, utils, responses
 
 logger = logging.getLogger(__name__)
 dw.register(accept_terms=True)
@@ -110,10 +110,10 @@ def predict(input_file, accept="application/json", **options):
         logger.error("Error detecting drift: %s", err, exc_info=True)
         raise  # Reraise the exception after log
     logger.debug("Return results as format: %s", accept)
-    return {
-        "drift": detected,  # True if the image is detected as drift
-        "warning": warning,  # True if the image is detected as warning
-        "tags": tags,  # Tags to be used for the experiment
-        "version": v,  # Version to be used for the experiment
-        "distance": result.distance,  # Distance value from the detector
-    }
+    return responses.content_types[accept](
+        {
+            "drift": detected, "warning": warning,
+            "tags": tags, "version": v,
+            "distance": result.distance,
+        } # fmt: skip
+    )
