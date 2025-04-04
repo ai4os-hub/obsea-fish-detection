@@ -10,7 +10,8 @@ By convention, the CONSTANTS defined in this module are in UPPER_CASE.
 
 import os
 from importlib import metadata
-from obsea.config import data_version
+
+from obsea.config import data_version, device
 
 # Ensure that your model package has a config.py file with the following
 # pylint: disable=unused-import
