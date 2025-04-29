@@ -16,7 +16,7 @@ class PredArgsSchema(marshmallow.Schema):
 
     input_file = fields.Field(
         metadata={
-            "description": "NPY file with np.arrays for predictions.",
+            "description": "Image used to evaluate the data drift.",
             "type": "file",
             "location": "form",
         },
