@@ -4,3 +4,4 @@ drift-monitor ~= 1.1.0
 rich ~= 13.9.4
 rich_argparse ~= 1.7.0
 frouros ~= 0.9.0
+deepaas ~= 2.6.0
