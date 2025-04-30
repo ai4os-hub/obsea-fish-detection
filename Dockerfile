@@ -1,41 +1,72 @@
 # Dockerfile may have following Arguments:
+# tag - tag for the Base image, (e.g. 2.9.1 for tensorflow)
+# branch - user repository branch to clone, i.e. test (default: master)
 #
 # To build the image:
+# $ docker build -t <dockerhub_user>/<dockerhub_repo> --build-arg arg=value .
+# or using default args:
 # $ docker build -t <dockerhub_user>/<dockerhub_repo> .
 #
-# Be Aware! For the Jenkins CI/CD pipeline, 
-# input args are defined inside the JenkinsConstants.groovy, not here!
+# [!] Note: For the Jenkins CI/CD pipeline, input args are defined inside the
+# Jenkinsfile, not here!
 
-# Base image, e.g. tensorflow/tensorflow:2.9.1
-FROM ultralytics/ultralytics:8.3.61-python
+ARG tag=2.7.0-cuda11.8-cudnn9-runtime
 
-LABEL maintainer='Borja Esteban Sanchis'
-LABEL version='0.0.1'
+# Base image, e.g. pytorch/pytorch:2.x.x-cuda...
+FROM pytorch/pytorch:${tag}
+
+LABEL maintainer='Borja Esteban'
+LABEL version='1.0.0'
+
+# What user branch to clone [!]
+ARG branch=drift-camera
+
+# Install Ubuntu packages
+# - gcc is needed in Pytorch images because deepaas installation might break otherwise (see docs)
+#   (it is already installed in tensorflow images)
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    apt-get install -y --no-install-recommends \
+        gcc \
+        git \
+        curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Update python packages
+# [!] Remember: DEEP API V2 only works with python>=3.6
+RUN python3 --version && \
+    pip3 install --no-cache-dir --upgrade pip setuptools wheel
+
+# Set LANG environment
+ENV LANG=C.UTF-8
 
 # Set the working directory
 WORKDIR /srv
 
-# Create a user and group
-RUN groupadd -r ai4os && useradd -r -g ai4os ai4os
+# EXPERIMENTAL: install deep-start script
+# N.B.: This repository also contains run_jupyter.sh
+RUN git clone https://github.com/deephdc/deep-start /srv/.deep-start && \
+    ln -s /srv/.deep-start/deep-start.sh /usr/local/bin/deep-start && \
+    ln -s /srv/.deep-start/run_jupyter.sh /usr/local/bin/run_jupyter
 
-# Copy the application to the working directory
-COPY --chown=ai4os:ai4os . /srv
+# Install JupyterLab
+ENV JUPYTER_CONFIG_DIR=/srv/.deep-start/
+# Necessary for the Jupyter Lab terminal
+ENV SHELL=/bin/bash
+RUN pip3 install --no-cache-dir jupyterlab
 
-# Install the application as editable with the requirements
-RUN pip install --no-cache -e .
+# Install user app
+RUN git clone --depth 1 -b $branch https://github.com/ai4os-hub/obsea-fish-detection.git && \
+    pip3 install --no-cache-dir -e ./obsea-fish-detection
 
-# Copy updated pyproject.toml to include OBSEA authors and rename the module
-# Re-install application with the updated pyproject.toml
-RUN cd /srv/ai4os-yolov8-torch && \
-    module=$(cat pyproject.toml |grep '\[project\]' -A1 |grep 'name' | cut -d'=' -f2 |tr -d ' ' |tr -d '"') && \
-    pip uninstall -y $module
-ENV MODEL_NAME="obsea_fish_detection"
-COPY ./pyproject-child.toml /srv/ai4os-yolov8-torch/pyproject.toml
-RUN cd /srv/ai4os-yolov8-torch && pip install --no-cache -e .
+# Open ports: DEEPaaS (5000), Monitoring (6006), Jupyter (8888)
+EXPOSE 5000 6006 8888
 
-RUN mkdir -p /srv/ai4os-yolov8-torch/models/yolov8_obsea_xlarge/weights && \
-    curl -L https://github.com/EnocMartinez/obsea-fish-detection/releases/download/model/12sp_1537img_xlarge_lr_0_000375_1920_best.pt \
-    --output /srv/ai4os-yolov8-torch/models/yolov8_obsea_xlarge/weights/best.pt && \
-    mkdir -p /srv/ai4os-yolov8-torch/models/yolov8_obsea_nano/weights && \
-    curl -L https://github.com/EnocMartinez/obsea-fish-detection/releases/download/model/12sp_1537img_nano_lr_0_000375_1920_best.pt \
-    --output /srv/ai4os-yolov8-torch/models/yolov8_obsea_nano/weights/best.pt
+# Define environment variables to track models and encoded images
+ENV DATASETS_DIR=/srv/obsea-fish-detection/datasets
+ENV MODELS_DIR=/srv/obsea-fish-detection/models
+ENV ENCODED_DIR=/srv/obsea-fish-detection/encoded
+
+# Launch deepaas
+ENTRYPOINT [ "deep-start" ]
+CMD ["--deepaas"]
+
