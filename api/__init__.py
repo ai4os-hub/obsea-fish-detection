@@ -7,13 +7,16 @@ docs [1] and at a canonical exemplar module [2].
 [2]: https://github.com/deephdc/demo_app
 """
 
+import datetime as dt
 import logging
+import os
+import shutil
 
 import drift_monitor as dw
 
 from obsea.encoders.utils import load_encodings
 
-from . import config, schemas, utils, responses
+from . import config, responses, schemas, utils
 
 logger = logging.getLogger(__name__)
 dw.register(accept_terms=True)
@@ -90,9 +93,18 @@ def predict(input_file, accept="application/json", **options):
     Returns:
         The predicted model values or files.
     """
+    time = dt.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    link = f"https://{config.store_url}?path={time}"
+    if config.store_dir:  # If store configured, move to permanent storage
+        image_path = f"{config.store_dir}/{time}/image.jpg"
+        logger.debug("Saving image to store: %s", config.store_url)
+        os.makedirs(os.path.dirname(image_path), exist_ok=True)
+        shutil.move(input_file.filename, image_path)
+    else:  # If not, copy to a temporary location
+        image_path = input_file.filename
     try:  # Load the image and encode it
-        logger.debug("Loading image from input_file: %s", input_file.filename)
-        image = utils.load_image(input_file.filename)
+        logger.debug("Loading image from input_file: %s", image_path)
+        image = utils.load_image(image_path)
         normalized = utils.transform(image).to(config.device)
         encoded = utils.autoencoder.encoder(normalized.unsqueeze(0))[0]
     except Exception as err:
@@ -105,15 +117,20 @@ def predict(input_file, accept="application/json", **options):
             result, _ = utils.detector.update(encoded.detach().cpu().numpy())
             warning = result.distance > options["warning_distance"]
             detected = result.distance > options["drift_distance"]
-            monitor(detected, {"distance": result.distance})
+            parameters = {
+                "distance": result.distance, "warning": warning,
+                "warning_distance": options["warning_distance"],
+                "drift_distance": options["drift_distance"],
+                "link": link if config.store_url else None,
+            } # fmt: skip
+            monitor(detected, parameters)
     except Exception as err:
         logger.error("Error detecting drift: %s", err, exc_info=True)
         raise  # Reraise the exception after log
     logger.debug("Return results as format: %s", accept)
     return responses.content_types[accept](
         {
-            "drift": detected, "warning": warning,
+            "drift": detected, "parameters": parameters,
             "tags": tags, "version": v,
-            "distance": result.distance,
         } # fmt: skip
     )

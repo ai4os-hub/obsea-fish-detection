@@ -3,6 +3,7 @@
 import logging
 import sys
 from functools import partial
+import datetime as dt
 
 from frouros.detectors.data_drift import MMDStreaming
 from frouros.utils.kernels import rbf_kernel
@@ -44,6 +45,11 @@ def train_arguments(schema):
 def load_image(image_path):
     """Load an image from a given path."""
     return Image.open(image_path).convert("RGB")
+
+
+def image_url(image_path):
+    """Generate a URL for the image."""
+    return f"{config.store}/{image_path}"
 
 
 # Load the detector and autoencoder model

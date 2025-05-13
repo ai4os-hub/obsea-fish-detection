@@ -21,14 +21,18 @@ LABEL version='1.0.0'
 # What user branch to clone [!]
 ARG branch=drift-camera
 
+# Drift Watch arguments
+ARG MONITOR_URL=https://drift-watch.dev.ai4eosc.eu
+ARG MYTOKEN
+
 # Install Ubuntu packages
 # - gcc is needed in Pytorch images because deepaas installation might break otherwise (see docs)
 #   (it is already installed in tensorflow images)
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get install -y --no-install-recommends \
-        gcc \
-        git \
-        curl \
+    gcc \
+    git \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Update python packages
@@ -39,8 +43,9 @@ RUN python3 --version && \
 # Set LANG environment
 ENV LANG=C.UTF-8
 
-# Set the working directory
+# Set the working directory and create the storage folder
 WORKDIR /srv
+RUN mkdir /storage/camera-images
 
 # EXPERIMENTAL: install deep-start script
 # N.B.: This repository also contains run_jupyter.sh
@@ -66,7 +71,11 @@ ENV DATASETS_DIR=/srv/obsea-fish-detection/datasets
 ENV MODELS_DIR=/srv/obsea-fish-detection/models
 ENV ENCODED_DIR=/srv/obsea-fish-detection/encoded
 
+# Define location for API interface
+ENV DRIFT_MONITOR_STORE=/storage/camera-images
+ENV DRIFT_MONITOR_URL=${MONITOR_URL}
+ENV DRIFT_MONITOR_MYTOKEN=${MYTOKEN}
+
 # Launch deepaas
 ENTRYPOINT [ "deep-start" ]
 CMD ["--deepaas"]
-

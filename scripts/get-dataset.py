@@ -43,7 +43,7 @@ def main(args: Arguments):
     logger.info("Dataset script with log level: %s", args.log_level)
 
     logger.info("Downloading dataset version: %s", args.version)
-    zip_file = config.datasets_path / f"obsea{args.version}.zip"
+    zip_file = config.datasets_path / f"obsea.{args.version}.zip"
     datasets.download(zip_file, args.version)
 
     logger.info("Extracting dataset version: %s", args.version)

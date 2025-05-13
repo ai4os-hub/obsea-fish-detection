@@ -31,7 +31,6 @@ _authors = [] if _authors == [""] else _authors
 _authors += api_metadata["Author-emails"].keys()
 api_metadata["Authors"] = sorted(_authors)
 
-
 # MyToken configuration
 my_token = os.getenv("DRIFT_MONITOR_MYTOKEN", None)
 if my_token is None:
@@ -44,3 +43,7 @@ driftwatch = os.getenv("DRIFT_MONITOR_URL", None)
 if driftwatch is None:
     err = "Please set the environment variable DRIFT_MONITOR_URL"
     raise RuntimeError(err)
+
+# Store for uploaded images
+store_dir = os.getenv("DRIFT_MONITOR_STORE_DIR", None)
+store_url = os.getenv("DRIFT_MONITOR_STORE_URL", None)
