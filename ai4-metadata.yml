@@ -15,7 +15,7 @@ description: |-
   To enhance the model's performance, YOLOv8's (nano, xlarge) built-in data augmentation techniques 
   were utilized. The hyperparameters controlling the data augmentation were optimized 
   according to the guidelines provided in the official documentation.
-  This module is mainly based on this already [existing module](https://github.com/ai4os-hub/ai4os-yolov8-torch)
+  This module is mainly based on this already [existing module](https://github.com/ai4os-hub/ai4os-yolo-torch)
 
   Here is an example of the model's output:
 

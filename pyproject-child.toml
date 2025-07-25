@@ -35,11 +35,11 @@ env = ["DATA_PATH=tests/data", "MODELS_PATH=tests/models"]
 addopts = "--import-mode=importlib"
 
 [tool.setuptools]
-packages = ["yolov8_api", "obsea_fish_detection.api"]
+packages = ["ai4os_yolo", "obsea_fish_detection.api"]
 
 [tool.setuptools.package-dir]
 "obsea_fish_detection.api" = "api"
-"yolov8_api" = "yolov8_api"
+"ai4os_yolo" = "ai4os_yolo"
 
 [tool.setuptools.dynamic]
 dependencies = { file = ["requirements.txt"] }
