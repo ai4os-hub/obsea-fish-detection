@@ -1,29 +1,7 @@
 metadata_version: 2.0.0
 title: OBSEA Fish Detection
 summary: AI-based fish detection and classification algorithm based on YOLOv8.
-description: |-
-  The OBSEA is an underwater observatory that has been acquiring multiparametric data
-  since 2009. Over the years, various cameras have been deployed, resulting in a vast 
-  archive of pictures dating back to 2011. Historically, this data has been manually 
-  analyzed to extract ecological information about the fish community in the area, a 
-  process that is both time-consuming and repetitive.
-
-  In this application, we employed an AI-based fish detection and classification algorithm, 
-  leveraging YOLOv8, to automate this process. The  model has been finetuned to 
-  detect and classify fish at the OBSEA underwater observatory. 
-
-  To enhance the model's performance, YOLOv8's (nano, xlarge) built-in data augmentation techniques 
-  were utilized. The hyperparameters controlling the data augmentation were optimized 
-  according to the guidelines provided in the official documentation.
-  This module is mainly based on this already [existing module](https://github.com/ai4os-hub/ai4os-yolov8-torch)
-
-  Here is an example of the model's output:
-
-  <img class='fit', src='https://raw.githubusercontent.com/ai4os-hub/obsea-fish-detection/main/image/obsea.png'/>
-    
-  You can find more information on Yolov8 here:
-  * https://github.com/ultralytics/ultralytics
-  * https://docs.ultralytics.com
+description: "The OBSEA is an underwater observatory that has been acquiring multiparametric data\nsince 2009. Over the years, various cameras have been deployed, resulting in a vast \narchive of pictures dating back to 2011. Historically, this data has been manually \nanalyzed to extract ecological information about the fish community in the area, a \nprocess that is both time-consuming and repetitive.\n\nIn this application, we employed an AI-based fish detection and classification algorithm, \nleveraging YOLOv8, to automate this process. The  model has been finetuned to \ndetect and classify fish at the OBSEA underwater observatory. \n\nTo enhance the model's performance, YOLOv8's (nano, xlarge) built-in data augmentation techniques \nwere utilized. The hyperparameters controlling the data augmentation were optimized \naccording to the guidelines provided in the official documentation.\nThis module is mainly based on this already [existing module](https://github.com/ai4os-hub/ai4os-yolov8-torch)\n\nHere is an example of the model's output:\n\n<img class='fit', src='https://raw.githubusercontent.com/ai4os-hub/obsea-fish-detection/main/image/obsea.png'/>\n  \nYou can find more information on Yolov8 here:\n* https://github.com/ultralytics/ultralytics\n* https://docs.ultralytics.com"
 dates:
   created: '2023-11-29'
   updated: '2024-09-27'
@@ -32,20 +10,22 @@ links:
   docker_image: ai4oshub/obsea-fish-detection
   ai4_template: ai4-template-child/2.0.1
   dataset: https://doi.org/10.5281/zenodo.13903520
+  zenodo_doi: https://doi.org/10.5281/zenodo.14888439
 tags:
-  - deep learning
-  - object detection
-  - yolov8
-  - vo.imagine-ai.eu
+- deep learning
+- object detection
+- yolov8
+- vo.imagine-ai.eu
 tasks:
-  - Computer Vision
-  - Classification
+- Computer Vision
+- Classification
 categories:
-  - AI4 pre trained
-  - AI4 trainable
-  - AI4 inference
+- AI4 pre trained
+- AI4 trainable
+- AI4 inference
 libraries:
-  - PyTorch
+- PyTorch
 data-type:
-  - Image
-  - Video
+- Image
+- Video
+doi: 10.5281/zenodo.14888439
